@@ -33,12 +33,13 @@ int main() {
 
   // test restore non vn on
   unikey->reset();
+  opt.spellcheck = 1; // auto-restore require spellcheck on
   opt.auto_restore_non_vn = 1;
   unikey->set_options(opt);
   unikey->process("teenn ");
   assert(r == "teenn ");
 
-  unikey->set_input_method(unikey::SimpleUnikey::IM_VNI);
+  unikey->set_input_method(unikey::SimpleUnikey::InputMethod::VNI);
   unikey->process("thuong7");
   assert(r == "thương");
 
