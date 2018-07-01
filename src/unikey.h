@@ -4,7 +4,7 @@
 #include <string>
 
 class UkEngine;
-class UkSharedMem;
+struct UkSharedMem;
 
 namespace unikey {
 

@@ -100,8 +100,7 @@ void SimpleUnikey::process_backspace() {
 }
 
 void SimpleUnikey::process(std::string const& str) {
-  UkOutputType oType;
-  for (int i = 0; i < str.length(); i++) {
+  for (unsigned int i = 0; i < str.length(); i++) {
     process(str[i]);
   }
 }
