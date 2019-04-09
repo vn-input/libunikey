@@ -11,5 +11,8 @@ set (SOURCES byteio.cpp
 )
 
 add_library(ukengine STATIC ${SOURCES})
-set_target_properties(ukengine PROPERTIES COMPILE_FLAGS "-funsigned-char -Wno-invalid-source-encoding")
-
+if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 8.0)
+	set_target_properties(ukengine PROPERTIES COMPILE_FLAGS "-funsigned-char")
+else()
+	set_target_properties(ukengine PROPERTIES COMPILE_FLAGS "-funsigned-char -Wno-invalid-source-encoding")
+endif()

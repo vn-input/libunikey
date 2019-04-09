@@ -24,9 +24,8 @@ int main() {
   unikey->reset();
   unikey->process("thuys");
   assert(r == "thúy");
-  auto opt = unikey::Options{
-    .modern_style = 1,
-  };
+  auto opt = unikey::Options{};
+  opt.modern_style = 1;
   unikey->set_options(opt);
   unikey->process(" thuys");
   assert(r == "thúy thuý");
