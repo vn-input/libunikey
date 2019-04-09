@@ -9,6 +9,7 @@ bool initLib = false;
 
 const std::map<SimpleUnikey::InputMethod, UkInputMethod> INPUTMETHOD_MAPPING {
   {SimpleUnikey::InputMethod::TELEX, UkTelex},
+  {SimpleUnikey::InputMethod::TELEX_SIMPLE, UkSimpleTelex},
   {SimpleUnikey::InputMethod::VNI, UkVni},
 };
 

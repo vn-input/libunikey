@@ -26,6 +26,7 @@ public:
   enum class InputMethod {
     TELEX,
     VNI,
+    TELEX_SIMPLE,
   };
 
   void reset();
