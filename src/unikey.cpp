@@ -1,5 +1,6 @@
 #include <map>
 #include <ukengine.h>
+#include <codecvt>
 
 #include "unikey.h"
 
@@ -72,7 +73,7 @@ SimpleUnikey::~SimpleUnikey() {
   delete sharedMem;
 }
 
-void SimpleUnikey::update_result(unsigned char c) {
+void SimpleUnikey::update_result(unsigned int c) {
   if (engine_buf_back > 0) {
     erase_utf8_chars(result, engine_buf_back);
   }
@@ -80,11 +81,11 @@ void SimpleUnikey::update_result(unsigned char c) {
   if (engine_buf_size > 0) {
     result.append((char*)engine_buf, engine_buf_size);
   } else if (c > 0) {
-    result.append(1, c);
+    appendCodePoint(result, c);
   }
 }
 
-void SimpleUnikey::process(unsigned char c) {
+void SimpleUnikey::process(unsigned int c) {
   UkOutputType _;
   engine_buf_size = sizeof(engine_buf);
 
@@ -100,9 +101,9 @@ void SimpleUnikey::process_backspace() {
   update_result(0);
 }
 
-void SimpleUnikey::process(std::string const& str) {
+void SimpleUnikey::process(std::wstring const& str) {
   for (unsigned int i = 0; i < str.length(); i++) {
-    process(str[i]);
+    process((unsigned int)str[i]);
   }
 }
 
@@ -139,4 +140,24 @@ void SimpleUnikey::set_options(const Options& opt) {
   sharedMem->options.modernStyle = opt.modern_style;
   sharedMem->options.autoNonVnRestore = opt.auto_restore_non_vn;
   sharedMem->options.spellCheckEnabled = opt.spellcheck;
+}
+
+// Append an unsigned int representing an Unicode code point to a string 
+void SimpleUnikey::appendCodePoint(std::string& str, unsigned int codePoint) {
+  // Thanks ChatGPT
+  if (codePoint <= 0x7F) {
+        str += static_cast<char>(codePoint);
+    } else if (codePoint <= 0x7FF) {
+        str += static_cast<char>((codePoint >> 6) | 0xC0);
+        str += static_cast<char>((codePoint & 0x3F) | 0x80);
+    } else if (codePoint <= 0xFFFF) {
+        str += static_cast<char>((codePoint >> 12) | 0xE0);
+        str += static_cast<char>(((codePoint >> 6) & 0x3F) | 0x80);
+        str += static_cast<char>((codePoint & 0x3F) | 0x80);
+    } else if (codePoint <= 0x10FFFF) {
+        str += static_cast<char>((codePoint >> 18) | 0xF0);
+        str += static_cast<char>(((codePoint >> 12) & 0x3F) | 0x80);
+        str += static_cast<char>(((codePoint >> 6) & 0x3F) | 0x80);
+        str += static_cast<char>((codePoint & 0x3F) | 0x80);
+    }
 }

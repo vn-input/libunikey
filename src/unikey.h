@@ -30,8 +30,8 @@ public:
   };
 
   void reset();
-  void process(unsigned char c);
-  void process(std::string const& str);
+  void process(unsigned int c);
+  void process(std::wstring const& str);
   void process_backspace();
   void restore();
   const std::string& get_result();
@@ -44,12 +44,13 @@ private:
   UkSharedMem *sharedMem;
 
   std::string result;
+  void appendCodePoint(std::string& str, unsigned int codePoint);
 
   // engine results
   unsigned char engine_buf[1024];
   int engine_buf_size;
   int engine_buf_back;
-  void update_result(unsigned char c);
+  void update_result(unsigned int c);
 };
 
 }
